@@ -1,18 +1,18 @@
-const CACHE_NAME = 'color-app-v2';
+const CACHE_NAME = 'color-app-v3';
 
 const FILES_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './style.css',
-  './icon-192.png',
-  './icon-512.png',
-  './maskable-192.png',
-  './maskable-512.png',
   './canvas.js',
   './click.mp3',
   './music1.wav',
   './music2.wav',
+  './images/icon-192.png',
+  './images/icon-512.png',
+  './images/maskable-192.png',
+  './images/maskable-512.png',
   'https://i.postimg.cc/RFf6pbPQ/cat.jpg',
   'https://i.postimg.cc/qRyft8Rv/dog.png',
   'https://i.postimg.cc/QNgGhkw6/panda.png',
@@ -51,9 +51,8 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        return response || fetch(event.request);
-      })
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
   );
 });
