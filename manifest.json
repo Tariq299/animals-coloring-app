@@ -1,12 +1,12 @@
 {
   "name": "Animal Coloring App",
   "short_name": "ColorApp",
-  "id": "/coloring-app",
-  "start_url": "./index.html",
+  "id": "coloring-app",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#f5f5f5",
-  "description": "A fun offline coloring app for kids to draw and learn",
+  "description": "A fun and creative coloring app for kids featuring animals like cats, dogs, pandas and more.",
   "icons": [
     {
       "src": "icon-192.png",
