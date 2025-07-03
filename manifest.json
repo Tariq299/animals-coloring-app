@@ -8,7 +8,7 @@
   "theme_color": "#4A90E2",
   "orientation": "portrait",
   "scope": "./",
-  "id": "/colorapp",
+  "id": "colorapp",
   "dir": "ltr",
   "lang": "en-US",
   "categories": ["education", "kids", "creative"],
