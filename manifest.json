@@ -1,11 +1,17 @@
 {
-  "name": "ColoringApp",
+  "name": "ColorApp - Animal Coloring App for Kids",
   "short_name": "ColorApp",
+  "description": "Fun and interactive animal coloring app for kids. Works offline and can be installed!",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4A90E2",
-  "description": "A fun animal coloring app for kids",
+  "orientation": "portrait",
+  "id": "/",
+  "scope": "./",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "icons": [
     {
       "src": "icon-192.png",
@@ -17,11 +23,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "id": "/",
-  "scope": "./",
-  "orientation": "portrait",
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  }
+  ]
 }
