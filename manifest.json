@@ -1,11 +1,11 @@
 {
-  "name": "Animal Coloring App",
-  "short_name": "ColoringApp",
-  "start_url": "/animals-coloring-app/",
-  "scope": "/animals-coloring-app/",
+  "name": "ColoringApp",
+  "short_name": "ColorApp",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "theme_color": "#4A90E2",
+  "description": "A fun animal coloring app for kids",
   "icons": [
     {
       "src": "icon-192.png",
@@ -17,5 +17,11 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "id": "/",
+  "scope": "./",
+  "orientation": "portrait",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }
