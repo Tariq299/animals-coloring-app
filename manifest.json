@@ -4,13 +4,12 @@
   "description": "Fun and interactive animal coloring app for kids. Works offline and can be installed!",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#fffaf0",
   "theme_color": "#4A90E2",
   "orientation": "portrait",
   "scope": "./",
-  "dir": "ltr",
   "lang": "en-US",
-  "categories": ["education", "kids", "creative"],
+  "categories": ["education", "kids", "creative", "drawing", "coloring"],
   "icons": [
     {
       "src": "icon-192.png",
@@ -23,6 +22,18 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "prefer_related_applications": false
