@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Animal Coloring App</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    canvas {
+      border: 2px solid #444;
+      background: #fff;
+      cursor: crosshair;
+      max-width: 100%;
+    }
+    .tools {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin: 15px 0;
+    }
+    .color-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 5px 10px;
+    }
+    .color {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      cursor: pointer;
+    }
+    .pen-options label {
+      margin: 0 10px;
+    }
+    select, button {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎨 Animal Coloring App</h2>
+
+  <div class="tools">
+    <label>
+      Choose Animal:
+      <select id="sketchSelector">
+        <option value="cat">Cat</option>
+        <option value="dog">Dog</option>
+        <option value="panda">Panda</option>
+        <option value="parrot">Parrot</option>
+        <option value="sparrow">Sparrow</option>
+        <option value="horse">Horse</option>
+      </select>
+    </label>
+
+    <div class="color-row" id="colorPalette"></div>
+
+    <div class="pen-options">
+      <label><input type="radio" name="penSize" value="3"> Small</label>
+      <label><input type="radio" name="penSize" value="7" checked> Medium</label>
+      <label><input type="radio" name="penSize" value="15"> Large</label>
+    </div>
+
+    <div>
+      <button onclick="clearDrawing()">Clear</button>
+      <button onclick="downloadDrawing()">Download</button>
+    </div>
+  </div>
+
+  <canvas id="canvas" width="700" height="500"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const sketchSelector = document.getElementById('sketchSelector');
+    const colorPalette = document.getElementById('colorPalette');
+
+    let penColor = '#000000';
+    let penSize = 7;
+    let drawing = false;
+
+    const sketchImages = {
+      cat: 'https://i.postimg.cc/RFf6pbPQ/cat.jpg',
+      dog: 'https://i.postimg.cc/qRyft8Rv/dog.png',
+      panda: 'https://i.postimg.cc/QNgGhkw6/panda.png',
+      parrot: 'https://i.postimg.cc/BQqW6PGJ/parrot.jpg',
+      sparrow: 'https://i.postimg.cc/HLMv3TCS/sparrow.jpg',
+      horse: 'https://i.postimg.cc/RFzsD2Sv/horse.png',
+    };
+
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
+
+    function loadSketch(name) {
+      image.src = sketchImages[name];
+      image.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+    }
+
+    // Setup color palette
+    const colors = ['#000000', '#FF0000', '#00AA00', '#0000FF', '#FFA500', '#FFC0CB', '#8A2BE2', '#FFFF00'];
+    colors.forEach(color => {
+      const swatch = document.createElement('div');
+      swatch.className = 'color';
+      swatch.style.backgroundColor = color;
+      swatch.onclick = () => penColor = color;
+      colorPalette.appendChild(swatch);
+    });
+
+    // Pen size radio buttons
+    document.querySelectorAll('input[name=\"penSize\"]').forEach(input => {
+      input.onchange = (e) => penSize = parseInt(e.target.value);
+    });
+
+    function getPosition(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX || e.touches[0].clientX) - rect.left,
+        y: (e.clientY || e.touches[0].clientY) - rect.top
+      };
+    }
+
+    function startDrawing(e) {
+      drawing = true;
+      draw(e);
+    }
+
+    function stopDrawing() {
+      drawing = false;
+      ctx.beginPath();
+    }
+
+    function draw(e) {
+      if (!drawing) return;
+      const { x, y } = getPosition(e);
+      ctx.lineWidth = penSize;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = penColor;
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+
+    function clearDrawing() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    }
+
+    function downloadDrawing() {
+      const link = document.createElement('a');
+      link.download = sketchSelector.value + '-colored.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseleave', stopDrawing);
+
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchend', stopDrawing);
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      draw(e);
+    }, { passive: false });
+
+    sketchSelector.addEventListener('change', (e) => loadSketch(e.target.value));
+
+    // Load initial sketch
+    loadSketch('cat');
+  </script>
+</body>
+</html>
