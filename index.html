@@ -153,15 +153,15 @@
       <div>
         <button onclick="clearDrawing()">Clear</button>
         <button onclick="downloadDrawing()">Download</button>
+        <button onclick="toggleMusic()" id="musicBtn">🎵 Music</button>
       </div>
     </div>
 
     <canvas id="canvas" width="800" height="700"></canvas>
-  </div>
 
-  <audio id="clickSound" src="sounds/click.mp3" preload="auto"></audio>
-  <audio id="bgMusic" preload="auto" loop></audio>
-  <button onclick="toggleMusic()" id="musicBtn">🎵 Music</button>
+    <audio id="clickSound" src="sounds/click.mp3" preload="auto"></audio>
+    <audio id="bgMusic" preload="auto" loop></audio>
+  </div>
 
   <script>
     const canvas = document.getElementById('canvas');
@@ -180,18 +180,26 @@
     let currentTrack = 0;
 
     function playClickSound() {
-      clickSound.currentTime = 0;
-      clickSound.play();
+      try {
+        clickSound.currentTime = 0;
+        clickSound.play().catch(err => console.log("Click sound error:", err));
+      } catch (e) {
+        console.log("Click sound error:", e);
+      }
     }
 
     function toggleMusic() {
-      if (bgMusic.paused) {
+      if (bgMusic.paused || !bgMusic.src) {
         bgMusic.src = musicTracks[currentTrack];
         bgMusic.volume = 0.4;
-        bgMusic.play().catch(() => {});
+        bgMusic.play().catch(err => {
+          console.log("Autoplay blocked, play after user action:", err);
+        });
       } else {
         bgMusic.pause();
         currentTrack = (currentTrack + 1) % musicTracks.length;
+        bgMusic.src = musicTracks[currentTrack];
+        bgMusic.play().catch(() => {});
       }
     }
 
