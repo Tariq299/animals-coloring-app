@@ -114,6 +114,14 @@
     button:hover {
       background-color: #357abd;
     }
+
+.brush-options label {
+  margin: 0 10px;
+  font-weight: bold;
+  color: #fff;
+}
+
+    
   </style>
 </head>
 <body>
@@ -164,6 +172,11 @@
     let penColor = '#000000';
     let penSize = 7;
     let drawing = false;
+let brushType = 'round';  // default
+
+document.querySelectorAll('input[name="brushType"]').forEach(input => {
+  input.onchange = (e) => brushType = e.target.value;
+});
 
     const sketchImages = {
       cat: 'https://i.postimg.cc/RFf6pbPQ/cat.jpg',
@@ -224,7 +237,21 @@
       if (!drawing) return;
       const { x, y } = getPosition(e);
       ctx.lineWidth = penSize;
-      ctx.lineCap = 'round';
+      if (brushType === 'round') {
+  ctx.lineCap = 'round';
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+} else if (brushType === 'marker') {
+  ctx.lineCap = 'round';
+  ctx.globalAlpha = 0.6;
+  ctx.shadowBlur = 0;
+} else if (brushType === 'fuzzy') {
+  ctx.lineCap = 'round';
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = penColor;
+}
+
       ctx.strokeStyle = penColor;
       ctx.lineTo(x, y);
       ctx.stroke();
