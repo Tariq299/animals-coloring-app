@@ -158,10 +158,11 @@
     </div>
 
     <canvas id="canvas" width="800" height="700"></canvas>
-
-    <audio id="clickSound" src="sounds/click.mp3" preload="auto"></audio>
-    <audio id="bgMusic" preload="auto" loop></audio>
   </div>
+
+  <!-- ✅ Updated paths -->
+  <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+  <audio id="bgMusic" preload="auto" loop></audio>
 
   <script>
     const canvas = document.getElementById('canvas');
@@ -176,7 +177,7 @@
     let penSize = 7;
     let drawing = false;
     let brushType = 'round';
-    let musicTracks = ['sounds/music1.wav', 'sounds/music2.wav'];
+    let musicTracks = ['music1.wav', 'music2.wav'];
     let currentTrack = 0;
 
     function playClickSound() {
@@ -192,9 +193,7 @@
       if (bgMusic.paused || !bgMusic.src) {
         bgMusic.src = musicTracks[currentTrack];
         bgMusic.volume = 0.4;
-        bgMusic.play().catch(err => {
-          console.log("Autoplay blocked, play after user action:", err);
-        });
+        bgMusic.play().catch(err => console.log("Autoplay blocked:", err));
       } else {
         bgMusic.pause();
         currentTrack = (currentTrack + 1) % musicTracks.length;
@@ -313,7 +312,6 @@
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseleave', stopDrawing);
-
     canvas.addEventListener('touchstart', startDrawing);
     canvas.addEventListener('touchend', stopDrawing);
     canvas.addEventListener('touchmove', (e) => {
