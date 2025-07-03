@@ -189,18 +189,24 @@
       }
     }
 
-    function toggleMusic() {
-      if (bgMusic.paused || !bgMusic.src) {
-        bgMusic.src = musicTracks[currentTrack];
-        bgMusic.volume = 0.4;
-        bgMusic.play().catch(err => console.log("Autoplay blocked:", err));
-      } else {
-        bgMusic.pause();
-        currentTrack = (currentTrack + 1) % musicTracks.length;
-        bgMusic.src = musicTracks[currentTrack];
-        bgMusic.play().catch(() => {});
-      }
-    }
+    let musicState = 0; // 0 = play 1st, 1 = pause, 2 = play 2nd, 3 = pause
+
+function toggleMusic() {
+  if (musicState === 0 || musicState === 2) {
+    currentTrack = musicState === 0 ? 0 : 1;
+    bgMusic.src = musicTracks[currentTrack];
+    bgMusic.volume = 0.4;
+    bgMusic.play().then(() => {
+      musicBtn.textContent = `🔊 Playing ${currentTrack + 1}`;
+    }).catch(err => console.log("Autoplay error:", err));
+  } else {
+    bgMusic.pause();
+    musicBtn.textContent = "🔇 Music Off";
+  }
+
+  musicState = (musicState + 1) % 4;
+}
+
 
     document.querySelectorAll('input[name="brushType"]').forEach(input => {
       input.onchange = (e) => {
