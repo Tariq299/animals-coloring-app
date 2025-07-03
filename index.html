@@ -3,10 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <title>Animal Coloring App</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json" />
   <style>
-    /* Add your complete CSS here */
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #1e3c72, #2a5298, #4e6fae, #a2d5f2);
+      background-size: 400% 400%;
+      animation: gradientMove 20s ease infinite;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .app-container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    canvas {
+      border: 2px solid #444;
+      background: #fff;
+      cursor: crosshair;
+      width: 95%;
+      max-width: 800px;
+      height: auto;
+      touch-action: none;
+    }
+
+    .color-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+      padding: 20px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+      border-radius: 20px;
+    }
+
+    .color {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 4px solid #ccc;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .color:hover {
+      transform: scale(1.4);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .color.selected {
+      border: 3px solid #fff;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.9), 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .tool-section {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 12px 18px;
+      margin: 12px auto;
+      border-radius: 14px;
+      max-width: 600px;
+    }
+
+    .tool-section h4 {
+      margin-bottom: 8px;
+      font-size: 18px;
+      color: #ffeb3b;
+    }
+
+    .tool-section label {
+      margin: 0 12px;
+      font-weight: bold;
+    }
+
+    select, button {
+      padding: 8px 14px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px;
+      border-radius: 8px;
+      border: 1px solid #888;
+    }
+
+    button {
+      background-color: #4A90E2;
+      color: white;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #357abd;
+    }
   </style>
 </head>
 <body>
@@ -45,7 +149,6 @@
       <div>
         <button onclick="clearDrawing()">Clear</button>
         <button onclick="downloadDrawing()">Download</button>
-        <button onclick="toggleMusic()" id="musicBtn">🎵 Music</button>
       </div>
     </div>
 
@@ -53,7 +156,6 @@
   </div>
 
   <audio id="clickSound" src="click.mp3" preload="auto"></audio>
-  <audio id="bgMusic" preload="auto" loop></audio>
 
   <script>
     const canvas = document.getElementById('canvas');
@@ -61,35 +163,18 @@
     const sketchSelector = document.getElementById('sketchSelector');
     const colorPalette = document.getElementById('colorPalette');
     const clickSound = document.getElementById('clickSound');
-    const bgMusic = document.getElementById('bgMusic');
-    const musicBtn = document.getElementById('musicBtn');
 
     let penColor = '#000000';
     let penSize = 7;
     let drawing = false;
     let brushType = 'round';
-    let musicTracks = ['music1.wav', 'music2.wav'];
-    let currentTrack = 0;
-    let isPlaying = false;
 
     function playClickSound() {
-      clickSound.currentTime = 0;
-      clickSound.play().catch(() => {});
-    }
-
-    function toggleMusic() {
-      if (!isPlaying) {
-        bgMusic.src = musicTracks[currentTrack];
-        bgMusic.volume = 0.4;
-        bgMusic.play().then(() => {
-          musicBtn.textContent = `🔊 Playing ${currentTrack + 1}`;
-          isPlaying = true;
-        }).catch(console.log);
-      } else {
-        bgMusic.pause();
-        isPlaying = false;
-        musicBtn.textContent = '🔇 Music Off';
-        currentTrack = (currentTrack + 1) % musicTracks.length;
+      try {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      } catch (e) {
+        console.log("Click sound error:", e);
       }
     }
 
@@ -113,7 +198,7 @@
       panda: 'https://i.postimg.cc/QNgGhkw6/panda.png',
       parrot: 'https://i.postimg.cc/BQqW6PGJ/parrot.jpg',
       sparrow: 'https://i.postimg.cc/HLMv3TCS/sparrow.jpg',
-      horse: 'https://i.postimg.cc/RFzsD2Sv/horse.png',
+      horse: 'https://i.postimg.cc/RFzsD2Sv/horse.png'
     };
 
     const image = new Image();
