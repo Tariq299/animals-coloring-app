@@ -159,19 +159,54 @@
     <canvas id="canvas" width="800" height="700"></canvas>
   </div>
 
+  <audio id="clickSound" src="sounds/click.mp3" preload="auto"></audio>
+  <audio id="bgMusic" preload="auto" loop></audio>
+  <button onclick="toggleMusic()" id="musicBtn">🎵 Music</button>
+
   <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const sketchSelector = document.getElementById('sketchSelector');
     const colorPalette = document.getElementById('colorPalette');
+    const clickSound = document.getElementById('clickSound');
+    const bgMusic = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
 
     let penColor = '#000000';
     let penSize = 7;
     let drawing = false;
-    let brushType = 'round'; // default
+    let brushType = 'round';
+    let musicTracks = ['sounds/music1.wav', 'sounds/music2.wav'];
+    let currentTrack = 0;
+
+    function playClickSound() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.src = musicTracks[currentTrack];
+        bgMusic.volume = 0.4;
+        bgMusic.play().catch(() => {});
+      } else {
+        bgMusic.pause();
+        currentTrack = (currentTrack + 1) % musicTracks.length;
+      }
+    }
 
     document.querySelectorAll('input[name="brushType"]').forEach(input => {
-      input.onchange = (e) => brushType = e.target.value;
+      input.onchange = (e) => {
+        brushType = e.target.value;
+        playClickSound();
+      };
+    });
+
+    document.querySelectorAll('input[name="penSize"]').forEach(input => {
+      input.onchange = (e) => {
+        penSize = parseInt(e.target.value);
+        playClickSound();
+      };
     });
 
     const sketchImages = {
@@ -203,12 +238,9 @@
         document.querySelectorAll('.color').forEach(c => c.classList.remove('selected'));
         swatch.classList.add('selected');
         penColor = color;
+        playClickSound();
       });
       colorPalette.appendChild(swatch);
-    });
-
-    document.querySelectorAll('input[name="penSize"]').forEach(input => {
-      input.onchange = (e) => penSize = parseInt(e.target.value);
     });
 
     function getPosition(e) {
@@ -234,7 +266,6 @@
       const { x, y } = getPosition(e);
       ctx.lineWidth = penSize;
 
-      // Brush style switch
       if (brushType === 'round') {
         ctx.lineCap = 'round';
         ctx.globalAlpha = 1;
@@ -282,7 +313,11 @@
       draw(e);
     }, { passive: false });
 
-    sketchSelector.addEventListener('change', (e) => loadSketch(e.target.value));
+    sketchSelector.addEventListener('change', (e) => {
+      loadSketch(e.target.value);
+      playClickSound();
+    });
+
     loadSketch('cat');
   </script>
 
