@@ -9,9 +9,9 @@
   "orientation": "portrait",
   "scope": "./",
   "id": "/colorapp",
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  },
+  "dir": "ltr",
+  "lang": "en-US",
+  "categories": ["education", "kids", "creative"],
   "icons": [
     {
       "src": "icon-192.png",
@@ -25,23 +25,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshot1.png",
-      "type": "image/png",
-      "sizes": "800x600",
-      "label": "Coloring screen"
-    },
-    {
-      "src": "screenshot2.png",
-      "type": "image/png",
-      "sizes": "800x600",
-      "label": "Animal selection"
-    }
-  ],
-  "lang": "en-US",
-  "categories": ["kids", "education", "creativity"],
-  "iarc_rating_id": "eCgbAA",
-  "dir": "ltr"
+  ]
 }
