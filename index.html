@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Animal Coloring App</title>
+  <link rel="manifest" href="manifest.json">
   <style>
     body {
       font-family: sans-serif;
@@ -110,7 +111,6 @@
       };
     }
 
-    // Setup color palette
     const colors = ['#000000', '#FF0000', '#00AA00', '#0000FF', '#FFA500', '#FFC0CB', '#8A2BE2', '#FFFF00'];
     colors.forEach(color => {
       const swatch = document.createElement('div');
@@ -120,8 +120,7 @@
       colorPalette.appendChild(swatch);
     });
 
-    // Pen size radio buttons
-    document.querySelectorAll('input[name=\"penSize\"]').forEach(input => {
+    document.querySelectorAll('input[name="penSize"]').forEach(input => {
       input.onchange = (e) => penSize = parseInt(e.target.value);
     });
 
@@ -181,8 +180,16 @@
 
     sketchSelector.addEventListener('change', (e) => loadSketch(e.target.value));
 
-    // Load initial sketch
     loadSketch('cat');
   </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('✅ Service Worker registered'))
+        .catch(err => console.error('❌ Service Worker error:', err));
+    }
+  </script>
+
 </body>
 </html>
